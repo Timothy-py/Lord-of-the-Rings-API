@@ -46,11 +46,36 @@ def get_all_characters():
 
 
 # return all quotes from a particular character(id)
-@characters.get('/<int:id>/quotes')
+@characters.get('/<string:id>/quotes')
 def get_character_quotes(id):
+
+    # declare pagination parameters
+    limit = request.args.get('limit', 100, type=int)
+    page = request.args.get('page', 1, type=int)
+    offset = request.args.get('offset', '', type=int)
+
+    # make request to the API
+    response = requests.get(
+        url="https://the-one-api.dev/v2/character/%s/quote" % id,
+        params={
+            "limit": limit,
+            "page": page,
+            "offset": offset
+        },
+        headers={
+            "Authorization": 'Bearer %s' % api_key
+        }
+    )
+
+    if response.status_code != 200:
+        return jsonify({
+            'message': response.response
+        }), HTTP_500_INTERNAL_SERVER_ERROR
+
     return jsonify({
-        'message': []
-    })
+        'message': 'Quotes retrieved successfully',
+        'quotes': response.json()
+    }), HTTP_200_OK
 
 
 # endpoint for a user to favorite a specific character(id)
