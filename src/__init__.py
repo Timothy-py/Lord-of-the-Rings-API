@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 import os
 from src.auth import auth
 from src.characters import characters
+from flask_jwt_extended import JWTManager
 from src.constants.http_status_codes import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
 from src.favorites import favorites
 from src.model import db
@@ -24,6 +25,9 @@ def create_app(test_config=None):
     # connect the database
     db.app = app
     db.init_app(app)
+
+    # initialize jwt manager
+    JWTManager(app=app)
 
     # register app handlers
     app.register_blueprint(auth)

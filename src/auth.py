@@ -79,6 +79,35 @@ def signup():
 # user login endpoint
 @auth.post('/login')
 def login():
+    email = request.json.get('email', '')
+    password = request.json.get('password', '')
+
+    # query the db for the user using email
+    user = User.query.filter_by(email=email).first()
+
+    # if user exist in the database
+    if user:
+        # check if password is == to the hashed password in the db
+        password_correct = check_password_hash(user.password, password)
+
+        # if password_correct == True
+        if password_correct:
+            # generate tokens
+            access_token = create_access_token(identity=user.id)
+            refresh_token = create_refresh_token(identity=user.id)
+
+            # send OK api response
+            return jsonify({
+                'message': 'Logged in successfully',
+                'user': {
+                    'username': user.username,
+                    'email': user.email,
+                    'access_token': access_token,
+                    'refresh_token': refresh_token
+                }
+            }), HTTP_200_OK
+
+    # if user does not exist
     return jsonify({
-        'message': "User logged in successfully"
-    })
+        'error': 'Invalid Credentials'
+    }), HTTP_401_UNAUTHORIZED
