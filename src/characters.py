@@ -1,16 +1,48 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
+import requests
+import os
+
+from src.constants.http_status_codes import HTTP_500_INTERNAL_SERVER_ERROR, HTTP_200_OK
 
 
 # configure characters route
 characters = Blueprint('characters', __name__, url_prefix='/api/v1/characters')
 
+# load api api_key
+api_key = os.environ.get("API_KEY")
+
 
 # endpoint to retrieve all characters
 @characters.get('/')
 def get_all_characters():
+
+    # declare pagination parameters
+    limit = request.args.get('limit', 100, type=int)
+    page = request.args.get('page', 1, type=int)
+    offset = request.args.get('offset', '', type=int)
+
+    # make request to the API
+    response = requests.get(
+        url="https://the-one-api.dev/v2/character",
+        params={
+            "limit": limit,
+            "page": page,
+            "offset": offset
+        },
+        headers={
+            "Authorization": 'Bearer %s' % api_key
+        }
+    )
+
+    if response.status_code != 200:
+        return jsonify({
+            'message': response.response
+        }), HTTP_500_INTERNAL_SERVER_ERROR
+
     return jsonify({
-        'message': []
-    })
+        'message': 'Characters retrieved successfully',
+        'characters': response.json()
+    }), HTTP_200_OK
 
 
 # return all quotes from a particular character(id)
