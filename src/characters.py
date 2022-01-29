@@ -98,12 +98,11 @@ def favorite_character(id):
 
     if response.status_code != 200:
         return jsonify({
-            'message': response.response
+            'message': response.reason
         }), HTTP_500_INTERNAL_SERVER_ERROR
 
-    # get character dict
+    # get character data
     character = response.json()['docs'][0]
-    print(character)
 
     # instantiate a new favorite object
     favorite = Favorite(
@@ -125,7 +124,7 @@ def favorite_character(id):
     db.session.commit()
 
     return jsonify({
-        "message": "Character saved to favorite",
+        "message": "Character saved as favorite",
         "favorite": {
             'id': favorite.id,
             'height': favorite.height,
@@ -145,12 +144,80 @@ def favorite_character(id):
 
 
 # endpoint for a user to favorite a quote(id) with its character(id) info
-@characters.post('/<int:quote_id>/quotes/<int:character_id>/favorites')
+@characters.post('/<string:character_id>/quotes/<string:quote_id>/favorites')
+@jwt_required()
 def favorite_quote_and_character(quote_id, character_id):
-    return jsonify({
-        'message': 'Quote added to favorites successfully'
-    })
 
+    # get logged in user id
+    logged_in_user_id = get_jwt_identity()
+
+    # make request to the API to get Quote
+    res_quote = requests.get(
+        url="https://the-one-api.dev/v2/quote/%s/" % quote_id,
+        headers={
+            "Authorization": 'Bearer %s' % api_key
+        }
+    )
+
+    res_character = requests.get(
+        url="https://the-one-api.dev/v2/character/%s/" % character_id,
+        headers={
+            "Authorization": 'Bearer %s' % api_key
+        }
+    )
+
+    if res_quote.status_code != 200 or res_character.status_code != 200:
+        return jsonify({
+            'message': 'Server encountered problem'
+        }), HTTP_500_INTERNAL_SERVER_ERROR
+
+    # get quote data
+    quote = res_quote.json()['docs'][0]
+
+    # get character data
+    character = res_character.json()['docs'][0]
+
+    # instantiate a new favorite object
+    favorite = Favorite(
+        dialog=quote['dialog'],
+        movie=quote['movie'],
+        height=character['height'],
+        race=character['race'],
+        gender=character['gender'],
+        birth=character['birth'],
+        spouse=character['spouse'],
+        death=character['death'],
+        realm=character['realm'],
+        hair=character['hair'],
+        name=character['name'],
+        wikiUrl=character['wikiUrl'],
+        user_id=logged_in_user_id
+    )
+
+    # save to database
+    db.session.add(favorite)
+    db.session.commit()
+
+    return jsonify({
+        "message": "Quote saved as favorite",
+        "favorite": {
+            'id': favorite.id,
+            'dialog': favorite.dialog,
+            'movie': favorite.movie,
+            'height': favorite.height,
+            'race': favorite.race,
+            'gender': favorite.gender,
+            'birth': favorite.birth,
+            'spouse': favorite.spouse,
+            'death': favorite.death,
+            'realm': favorite.realm,
+            'hair': favorite.hair,
+            'name': favorite.name,
+            'wikiUrl': favorite.wikiUrl,
+            'user_id': favorite.user_id,
+            'created_at': favorite.created_at
+        }
+    }), HTTP_201_CREATED
 
 # {
 #     "_id": "5cd99d4bde30eff6ebccfbd4",
