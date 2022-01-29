@@ -218,25 +218,3 @@ def favorite_quote_and_character(quote_id, character_id):
             'created_at': favorite.created_at
         }
     }), HTTP_201_CREATED
-
-# {
-#     "_id": "5cd99d4bde30eff6ebccfbd4",
-#     "height": "",
-#     "race": "Human",
-#     "gender": "Male",
-#     "birth": "FA 440",
-#     "spouse": "Unnamed wife",
-#     "death": "FA 489",
-#     "realm": "",
-#     "hair": "",
-#     "name": "Andróg",
-#     "wikiUrl": "http://lotr.wikia.com//wiki/Andr%C3%B3g"
-# }
-
-
-#  {
-#     "_id": "5cd96e05de30eff6ebcce7e9",
-#     "dialog": "Deagol!",
-#     "movie": "5cd95395de30eff6ebccde5d",
-#     "character": "5cd99d4bde30eff6ebccfe9e"
-# },
