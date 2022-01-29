@@ -1,8 +1,10 @@
 from flask import Blueprint, jsonify, request
 import requests
 import os
+from flask_jwt_extended import get_jwt_identity, jwt_required
+from src.model import Favorite, db
 
-from src.constants.http_status_codes import HTTP_500_INTERNAL_SERVER_ERROR, HTTP_200_OK
+from src.constants.http_status_codes import HTTP_500_INTERNAL_SERVER_ERROR, HTTP_200_OK, HTTP_201_CREATED
 
 
 # configure characters route
@@ -79,11 +81,67 @@ def get_character_quotes(id):
 
 
 # endpoint for a user to favorite a specific character(id)
-@characters.post('/<int:id>/favorites')
+@characters.post('/<string:id>/favorites')
+@jwt_required()
 def favorite_character(id):
+
+    # get logged in user id
+    logged_in_user_id = get_jwt_identity()
+
+    # make request to the API
+    response = requests.get(
+        url="https://the-one-api.dev/v2/character/%s/" % id,
+        headers={
+            "Authorization": 'Bearer %s' % api_key
+        }
+    )
+
+    if response.status_code != 200:
+        return jsonify({
+            'message': response.response
+        }), HTTP_500_INTERNAL_SERVER_ERROR
+
+    # get character dict
+    character = response.json()['docs'][0]
+    print(character)
+
+    # instantiate a new favorite object
+    favorite = Favorite(
+        height=character['height'],
+        race=character['race'],
+        gender=character['gender'],
+        birth=character['birth'],
+        spouse=character['spouse'],
+        death=character['death'],
+        realm=character['realm'],
+        hair=character['hair'],
+        name=character['name'],
+        wikiUrl=character['wikiUrl'],
+        user_id=logged_in_user_id
+    )
+
+    # save to database
+    db.session.add(favorite)
+    db.session.commit()
+
     return jsonify({
-        'message': 'Character added to favorite successfully'
-    })
+        "message": "Character saved to favorite",
+        "favorite": {
+            'id': favorite.id,
+            'height': favorite.height,
+            'race': favorite.race,
+            'gender': favorite.gender,
+            'birth': favorite.birth,
+            'spouse': favorite.spouse,
+            'death': favorite.death,
+            'realm': favorite.realm,
+            'hair': favorite.hair,
+            'name': favorite.name,
+            'wikiUrl': favorite.wikiUrl,
+            'user_id': favorite.user_id,
+            'created_at': favorite.created_at
+        }
+    }), HTTP_201_CREATED
 
 
 # endpoint for a user to favorite a quote(id) with its character(id) info
