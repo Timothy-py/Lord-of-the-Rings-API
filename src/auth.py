@@ -111,3 +111,15 @@ def login():
     return jsonify({
         'error': 'Invalid Credentials'
     }), HTTP_401_UNAUTHORIZED
+
+
+# refresh token endpoint
+@auth.get('/token/refresh')
+@jwt_required(refresh=True)
+def refresh_user_token():
+    identity = get_jwt_identity()
+    access_token = create_refresh_token(identity=identity)
+
+    return jsonify({
+        'access': access_token
+    }), HTTP_200_OK
