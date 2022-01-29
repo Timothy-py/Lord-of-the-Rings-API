@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 import os
 from src.auth import auth
 from src.characters import characters
+from src.constants.http_status_codes import HTTP_404_NOT_FOUND, HTTP_500_INTERNAL_SERVER_ERROR
 from src.favorites import favorites
 from src.model import db
 
@@ -24,15 +25,31 @@ def create_app(test_config=None):
     db.app = app
     db.init_app(app)
 
+    # register app handlers
+    app.register_blueprint(auth)
+    app.register_blueprint(characters)
+    app.register_blueprint(favorites)
+
+    # api index route
+
     @app.get('/')
     def index():
         return jsonify({
             'message': 'LORD OF THE RINGS CHARACTERS API'
         }), 200
 
-    # register app handlers
-    app.register_blueprint(auth)
-    app.register_blueprint(characters)
-    app.register_blueprint(favorites)
+    # 404 error handler
+    @app.errorhandler(HTTP_404_NOT_FOUND)
+    def handle_404(e):
+        return jsonify({
+            'error': 'Route Does Not Exist',
+        }), HTTP_404_NOT_FOUND
+
+    # 500 error handler
+    @app.errorhandler(HTTP_500_INTERNAL_SERVER_ERROR)
+    def handle_500(e):
+        return jsonify({
+            'error': 'Something went wrong with the server'
+        }), HTTP_500_INTERNAL_SERVER_ERROR
 
     return app
