@@ -3,7 +3,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from src.model import Favorite, db
 from flasgger import swag_from
 
-from src.constants.http_status_codes import HTTP_200_OK
+from src.constants.http_status_codes import HTTP_200_OK, HTTP_404_NOT_FOUND, HTTP_204_NO_CONTENT
 
 # configure favorites base route
 favorites = Blueprint('favorites', __name__, url_prefix='/api/v1/favorites')
@@ -59,3 +59,25 @@ def get_all_favorites():
         'meta': meta,
         'message': 'All your favorites retrieved successfully'
     }), HTTP_200_OK
+
+
+# unfavorite a quote or character
+@favorites.delete('/<int:id>')
+@jwt_required()
+@swag_from('./docs/favorites/unfavorite.yaml')
+def unfavorite(id):
+
+    logged_in_user_id = get_jwt_identity()
+
+    favorite_item = Favorite.query.filter_by(
+        id=id, user_id=logged_in_user_id).first()
+
+    if not favorite_item:
+        return jsonify({
+            'message': 'Item not found'
+        }), HTTP_404_NOT_FOUND
+
+    db.session.delete(favorite_item)
+    db.session.commit()
+
+    return jsonify({}), HTTP_204_NO_CONTENT

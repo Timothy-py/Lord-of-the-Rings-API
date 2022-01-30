@@ -1,0 +1,19 @@
+Endpoint for a logged in user to unfavorite a favorited item
+---
+tags:
+  - Favorites
+
+parameters:
+  - in: header
+    name: Authorization
+    required: true
+  - in: path
+    name: id
+    required: true
+
+responses:
+  204:
+    description: Unfavorited
+
+  404:
+    description: Item not found
