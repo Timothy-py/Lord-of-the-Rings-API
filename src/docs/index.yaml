@@ -1,0 +1,8 @@
+API Index endpoint
+---
+tags:
+  - Index
+
+responses:
+  200:
+    description: API Index Endpoint

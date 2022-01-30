@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
 import validators
+from flasgger import swag_from
 
 from src.constants.http_status_codes import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_401_UNAUTHORIZED, HTTP_409_CONFLICT
 
@@ -14,6 +15,7 @@ auth = Blueprint('auth', __name__, url_prefix="/api/v1/auth")
 
 # user signup endpoint
 @auth.post('/signup')
+@swag_from('./docs/auth/signup.yaml')
 def signup():
     # retrieve payloads from request body
     username = request.json['username']
@@ -78,6 +80,7 @@ def signup():
 
 # user login endpoint
 @auth.post('/login')
+@swag_from('./docs/auth/login.yaml')
 def login():
     email = request.json.get('email', '')
     password = request.json.get('password', '')
