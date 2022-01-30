@@ -1,3 +1,4 @@
+# ################################################################################################
 from flask import Blueprint, jsonify, request
 import requests
 import os
@@ -14,8 +15,10 @@ characters = Blueprint('characters', __name__, url_prefix='/api/v1/characters')
 # load api api_key
 api_key = os.environ.get("API_KEY")
 
+# ################################################################################################
 
-# endpoint to retrieve all characters
+
+# >>>>>>>>>>>>>>>>>>>> endpoint to retrieve all characters >>>>>>>>>>>>>>>>>>>>>>>>>>>>
 @characters.get('/')
 @swag_from('./docs/characters/get_all_characters.yaml')
 def get_all_characters():
@@ -48,8 +51,10 @@ def get_all_characters():
         'characters': response.json()
     }), HTTP_200_OK
 
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-# return all quotes from a particular character(id)
+
+# >>>>>>>>>>>>>>>>>>>>>> return all quotes from a particular character(id)>>>>>>>>>>>>>
 @characters.get('/<string:id>/quotes')
 @swag_from('./docs/characters/get_character_quotes.yaml')
 def get_character_quotes(id):
@@ -82,8 +87,10 @@ def get_character_quotes(id):
         'quotes': response.json()
     }), HTTP_200_OK
 
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-# endpoint for a user to favorite a specific character(id)
+
+# >>>>>>>>>>>>>>> endpoint for a user to favorite a specific character(id)>>>>>>>>>>>>>>>
 @characters.post('/<string:id>/favorites')
 @jwt_required()
 @swag_from('./docs/characters/favorite_character.yaml')
@@ -146,8 +153,10 @@ def favorite_character(id):
         }
     }), HTTP_201_CREATED
 
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-# endpoint for a user to favorite a quote(id) with its character(id) info
+
+# >>>>>>>>>>>>>>> endpoint for a user to favorite a quote(id) with its character(id) info >>>>>>>
 @characters.post('/<string:character_id>/quotes/<string:quote_id>/favorites')
 @jwt_required()
 @swag_from('./docs/characters/favorite_quote_and_character.yaml')
@@ -223,3 +232,5 @@ def favorite_quote_and_character(quote_id, character_id):
             'created_at': favorite.created_at
         }
     }), HTTP_201_CREATED
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

@@ -1,3 +1,4 @@
+# ################################################################################################
 from flask import Flask, jsonify
 import os
 from src.auth import auth
@@ -8,6 +9,8 @@ from src.favorites import favorites
 from src.model import db
 from flasgger import Swagger, swag_from
 from src.config.swagger import template, swagger_config
+
+# ################################################################################################
 
 
 def create_app(test_config=None):

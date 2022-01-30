@@ -1,3 +1,4 @@
+# ################################################################################################
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from src.model import Favorite, db
@@ -8,8 +9,10 @@ from src.constants.http_status_codes import HTTP_200_OK, HTTP_404_NOT_FOUND, HTT
 # configure favorites base route
 favorites = Blueprint('favorites', __name__, url_prefix='/api/v1/favorites')
 
+# ################################################################################################
 
-# retrieve all favorites of the logged in user
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>> retrieve all favorites of the logged in user >>>>>>>>>>>>>>>>>>>>>>
 @favorites.get('/')
 @jwt_required()
 @swag_from('./docs/favorites/get_all_favorites.yaml')
@@ -60,8 +63,10 @@ def get_all_favorites():
         'message': 'All your favorites retrieved successfully'
     }), HTTP_200_OK
 
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-# unfavorite a quote or character
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> unfavorite a quote or character >>>>>>>>>>>>>>>>>>>>>>>
 @favorites.delete('/<int:id>')
 @jwt_required()
 @swag_from('./docs/favorites/unfavorite.yaml')
@@ -81,3 +86,5 @@ def unfavorite(id):
     db.session.commit()
 
     return jsonify({}), HTTP_204_NO_CONTENT
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>

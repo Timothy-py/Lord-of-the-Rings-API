@@ -1,3 +1,4 @@
+# ################################################################################################
 from flask import Blueprint, jsonify, request
 from werkzeug.security import check_password_hash, generate_password_hash
 import validators
@@ -12,8 +13,10 @@ from flask_jwt_extended import create_access_token, create_refresh_token, jwt_re
 # configure authentication route
 auth = Blueprint('auth', __name__, url_prefix="/api/v1/auth")
 
+# ################################################################################################
 
-# user signup endpoint
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> user signup endpoint >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 @auth.post('/signup')
 @swag_from('./docs/auth/signup.yaml')
 def signup():
@@ -77,8 +80,10 @@ def signup():
         }
     }), HTTP_201_CREATED
 
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-# user login endpoint
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> user login endpoint >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 @auth.post('/login')
 @swag_from('./docs/auth/login.yaml')
 def login():
@@ -115,8 +120,10 @@ def login():
         'error': 'Invalid Credentials'
     }), HTTP_401_UNAUTHORIZED
 
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-# refresh token endpoint
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> refresh token endpoint >>>>>>>>>>>>>>>>>>>>>>>>>>>
 @auth.get('/token/refresh')
 @jwt_required(refresh=True)
 def refresh_user_token():
@@ -126,3 +133,5 @@ def refresh_user_token():
     return jsonify({
         'access': access_token
     }), HTTP_200_OK
+
+# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
