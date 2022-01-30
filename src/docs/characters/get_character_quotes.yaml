@@ -1,0 +1,25 @@
+Get All Quotes of a Character
+---
+tags:
+  - Characters
+
+parameters:
+  - in: path
+    name: id
+    required: true
+  - in: query
+    name: limit
+    required: false
+  - in: query
+    name: page
+    required: false
+  - in: query
+    name: offset
+    required: false
+
+responses:
+  200:
+    description: Quotes retrieved successfully
+
+  500:
+    description: Internal server error

@@ -1,0 +1,22 @@
+Get All Characters
+---
+tags:
+  - Characters
+
+parameters:
+  - in: query
+    name: limit
+    required: false
+  - in: query
+    name: page
+    required: false
+  - in: query
+    name: offset
+    required: false
+
+responses:
+  200:
+    description: Characters retrieved successfully
+
+  500:
+    description: Internal server error

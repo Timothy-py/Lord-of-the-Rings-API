@@ -1,0 +1,19 @@
+Endpoint for a logged in user to favorite a character
+---
+tags:
+  - Characters
+
+parameters:
+  - in: header
+    name: Authorization
+    required: true
+  - in: path
+    name: id
+    required: true
+
+responses:
+  201:
+    description: Character saved as favorite
+
+  500:
+    description: Internal server error

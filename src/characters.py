@@ -3,6 +3,7 @@ import requests
 import os
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from src.model import Favorite, db
+from flasgger import swag_from
 
 from src.constants.http_status_codes import HTTP_500_INTERNAL_SERVER_ERROR, HTTP_200_OK, HTTP_201_CREATED
 
@@ -16,6 +17,7 @@ api_key = os.environ.get("API_KEY")
 
 # endpoint to retrieve all characters
 @characters.get('/')
+@swag_from('./docs/characters/get_all_characters.yaml')
 def get_all_characters():
 
     # declare pagination parameters
@@ -38,7 +40,7 @@ def get_all_characters():
 
     if response.status_code != 200:
         return jsonify({
-            'message': response.response
+            'message': response.reason
         }), HTTP_500_INTERNAL_SERVER_ERROR
 
     return jsonify({
@@ -49,6 +51,7 @@ def get_all_characters():
 
 # return all quotes from a particular character(id)
 @characters.get('/<string:id>/quotes')
+@swag_from('./docs/characters/get_character_quotes.yaml')
 def get_character_quotes(id):
 
     # declare pagination parameters
@@ -71,7 +74,7 @@ def get_character_quotes(id):
 
     if response.status_code != 200:
         return jsonify({
-            'message': response.response
+            'message': response.reason
         }), HTTP_500_INTERNAL_SERVER_ERROR
 
     return jsonify({
@@ -83,6 +86,7 @@ def get_character_quotes(id):
 # endpoint for a user to favorite a specific character(id)
 @characters.post('/<string:id>/favorites')
 @jwt_required()
+@swag_from('./docs/characters/favorite_character.yaml')
 def favorite_character(id):
 
     # get logged in user id
@@ -146,6 +150,7 @@ def favorite_character(id):
 # endpoint for a user to favorite a quote(id) with its character(id) info
 @characters.post('/<string:character_id>/quotes/<string:quote_id>/favorites')
 @jwt_required()
+@swag_from('./docs/characters/favorite_quote_and_character.yaml')
 def favorite_quote_and_character(quote_id, character_id):
 
     # get logged in user id

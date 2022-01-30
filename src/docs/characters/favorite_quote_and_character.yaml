@@ -1,0 +1,22 @@
+Endpoint for a logged in user to favorite a Quote with its Character information
+---
+tags:
+  - Characters
+
+parameters:
+  - in: header
+    name: Authorization
+    required: true
+  - in: path
+    name: character_id
+    required: true
+  - in: path
+    name: quote_id
+    required: true
+
+responses:
+  201:
+    description: Quote saved as favorite
+
+  500:
+    description: Internal server error

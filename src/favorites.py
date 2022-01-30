@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from src.model import Favorite, db
+from flasgger import swag_from
 
 from src.constants.http_status_codes import HTTP_200_OK
 
@@ -11,6 +12,7 @@ favorites = Blueprint('favorites', __name__, url_prefix='/api/v1/favorites')
 # retrieve all favorites of the logged in user
 @favorites.get('/')
 @jwt_required()
+@swag_from('./docs/favorites/get_all_favorites.yaml')
 def get_all_favorites():
 
     # get logged in user id
