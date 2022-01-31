@@ -36,7 +36,7 @@ def create_app(config=config_dict['production']):
     Swagger(app, config=swagger_config, template=template)
 
     # api index route
-    @app.get('/')
+    @app.route('/')
     @swag_from('./docs/index.yaml')
     def index():
         return jsonify({
