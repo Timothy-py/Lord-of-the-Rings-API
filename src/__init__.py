@@ -14,7 +14,7 @@ from src.config.swagger import template, swagger_config
 # ################################################################################################
 
 
-def create_app(config=config_dict['dev']):
+def create_app(config=config_dict['testing']):
 
     # instantiate the app
     app = Flask(__name__, instance_relative_config=True)

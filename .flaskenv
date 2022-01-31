@@ -1,2 +1,2 @@
-export FLASK_ENV=development
+export FLASK_ENV=testing
 export FLASK_APP=src

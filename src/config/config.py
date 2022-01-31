@@ -18,14 +18,13 @@ class DevConfig(Config):
 
 class TestConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
+    SQLALCHEMY_DATABASE_URI = "sqlite://"  # use memory db
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class ProdConfig(Config):
     SQLALCHEMY_DATABASE_URI = config('SQLALCHEMY_DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = config('SQLALCHEMY_DATABASE_URI')
 
 
 config_dict = {
