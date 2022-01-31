@@ -1,7 +1,7 @@
 # ################################################################################################
 from flask import Blueprint, jsonify, request
 import requests
-import os
+from decouple import config
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from src.model import Favorite, db
 from flasgger import swag_from
@@ -13,7 +13,7 @@ from src.constants.http_status_codes import HTTP_500_INTERNAL_SERVER_ERROR, HTTP
 characters = Blueprint('characters', __name__, url_prefix='/api/v1/characters')
 
 # load api api_key
-api_key = os.environ.get("API_KEY")
+api_key = config("API_KEY")
 
 # ################################################################################################
 

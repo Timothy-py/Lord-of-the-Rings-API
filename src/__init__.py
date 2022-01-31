@@ -1,5 +1,6 @@
 # ################################################################################################
 from flask import Flask, jsonify
+from .config.config import config_dict
 import os
 from src.auth import auth
 from src.characters import characters
@@ -13,26 +14,12 @@ from src.config.swagger import template, swagger_config
 # ################################################################################################
 
 
-def create_app(test_config=None):
+def create_app(config=config_dict['dev']):
 
     # instantiate the app
     app = Flask(__name__, instance_relative_config=True)
 
-    if test_config is None:
-        app.config.from_mapping(
-            SECRET_KEY=os.environ.get("SECRET_KEY"),
-            SQLALCHEMY_DATABASE_URI=os.environ.get('SQLALCHEMY_DB_URI'),
-            SQLALCHEMY_TRACK_MODIFICATIONS=False,
-            JWT_SECRET_KEY=os.environ.get("JWT_SECRET_KEY"),
-
-            # configure swagger ui
-            SWAGGER={
-                'title': "Lord of the Rings Character API",
-                'uiversion': 3
-            }
-        )
-    else:
-        app.config.from_mapping(test_config)
+    app.config.from_object(config)
 
     # connect the database
     db.app = app
