@@ -1,6 +1,7 @@
 # Lord-of-the-Rings-API
 
-API for Characters and Quotes from The Lord of the Rings
+API for Characters and Quotes from The Lord of the Rings  
+[Live Link](https://lordoftheringsapi.herokuapp.com/)
 
 ## Main API Functionalities
 
