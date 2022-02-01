@@ -79,6 +79,6 @@ flask run
 
 ---
 
-\*\* The Swagger documentation can be accessed on the browser - http://localhost:5000/
+\*\* The Swagger documentation can be accessed on the browser via - http://localhost:5000/
 
 ###### _contact me @ adeyeyetimothy33@gmail.com_
