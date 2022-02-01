@@ -1,7 +1,7 @@
 Endpoint for a logged in user to retrieve all her favorites
 ---
 tags:
-  - Favorties
+  - Favorites
 
 parameters:
   - in: header
