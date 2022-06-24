@@ -2,11 +2,9 @@ Endpoint for a logged in user to favorite a character
 ---
 tags:
   - Characters
-
+security:
+- Authorization: []
 parameters:
-  - in: header
-    name: Authorization
-    required: true
   - in: path
     name: id
     required: true

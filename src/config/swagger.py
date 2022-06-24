@@ -1,4 +1,5 @@
 template = {
+    # "openapi": "3.0",
     "swagger": "2.0",
     "info": {
         "title": "Lord of the Rings Characters API",
@@ -16,12 +17,18 @@ template = {
         "https"
     ],
     "securityDefinitions": {
-        "Bearer": {
+        "Authorization": {
             "type": "apiKey",
             "name": "Authorization",
             "in": "header",
             "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
         }
+        # "Authorization": {
+        #     "type": "http",
+        #     "scheme": "bearer",
+        #     "bearerFormat": "JWT",
+        #     "description": "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\""
+        # }
     },
 }
 
