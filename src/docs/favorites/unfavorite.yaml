@@ -2,11 +2,9 @@ Endpoint for a logged in user to unfavorite a favorited item
 ---
 tags:
   - Favorites
-
+security:
+  - Authorization: []
 parameters:
-  - in: header
-    name: Authorization
-    required: true
   - in: path
     name: id
     required: true
