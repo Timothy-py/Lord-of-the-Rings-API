@@ -53,7 +53,7 @@ class AuthTestCase(unittest.TestCase):
 
         user = User.query.filter_by(email="testuser@gmail.com").first()
 
-        assert user.username == "testuser"
+        assert user.username == data['username']
 
         assert response.status_code == 201
 
